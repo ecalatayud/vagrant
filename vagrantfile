@@ -12,9 +12,7 @@ Vagrant.configure(2) do |config|
   # doesn't already exist on the user's system.
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/utopic/current/utopic-server-cloudimg-amd64-vagrant-disk1.box"
 
-  # Boot with a GUI so you can see the screen. (Default is headless)
-  #config.vm.boot_mode = :gui
-  config.vm.gui = true
+
   
   # Host name
   config.vm.host_name = "prueba-dev"
@@ -33,16 +31,11 @@ Vagrant.configure(2) do |config|
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
   config.vm.network "forwarded_port", guest: 80, host: 8080
-  config.vm.network "forwarded_port", guest: 22, host: 99
+ 
 
   
-#  config.vm.provider "virtualbox" do |vb|
-#    vb.customize ["modifyvm", :id, "--memory", "2048"]
-#	vb.customize ["modifyvm", :id, "--ioapic", "on"]
-#    vb.customize ["modifyvm", :id, "--cpus", "2"]
-#  end	
-  
   config.vm.provider :virtualbox do |vb|
+    vb.gui = true
 	vb.customize [
 	"modifyvm", :id,
 	"--memory", "2048",
@@ -59,9 +52,10 @@ Vagrant.configure(2) do |config|
   # folder, and the third is the path on the host to the actual folder.
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
   
-  config.vm.share_folder "v-data", "/vagrant", ".", :nfs => true
+  config.vm.synced_folder "v-data", "/vagrant"
 
   # Enable shell provisioning
-  config.vm.provision :shell, :path => "http://url.script.com"
+  #config.vm.provision :shell, :path => "https://raw.githubusercontent.com/ecalatayud/vagrant/master/prueba-dev.sh"
+  config.vm.provision :shell, :path => "prueba-dev.sh"
   
 end
